@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+    <title>Read files using File API</title>  
+
+	<script src="./main.js"></script>
+    <script type="text/javascript">
+	  var bdecoder = new BDecoder();
+	  var file = null;
+      function fileSelected() {  
+        file = document.getElementById('fileToUpload').files[0];
+        if (file) {
+          document.getElementById('fileName').innerHTML = 'Name: ' + file.name;  
+          document.getElementById('fileSize').innerHTML = 'Size: ' + file.size + 'B';
+          document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
+		  var d = new Date(file.lastModified);
+		  document.getElementById('fileLastModified').innerHTML = 'Last Modified Date: ' + d.toDateString();
+        }  
+      }  
+  
+      function uploadFile() {  
+        var reader = new FileReader(); //W3C FileAPI
+		document.getElementById('readyState').innerHTML = 'Ready State: ' + reader.readyState;
+		//reader.readAsBinaryString(file);
+		reader.readAsArrayBuffer(file);
+		
+		reader.onprogress = function (evt) {
+		  if (evt.lengthComputable) {
+			document.getElementById('progress').innerHTML = 'Progress: ' + (evt.loaded / evt.total * 100) + '%';
+		  }
+		};
+		
+		reader.onload = function (evt) {
+		  document.getElementById('readyState').innerHTML = 'Ready State: ' + reader.readyState;
+		  var fileString = reader.result;
+		  document.getElementById('result').innerHTML = '';
+		  var torr, torrentViewer = new TorrentViewer(document.getElementById('result'));
+		  //document.getElementById('result').innerHTML = fileString;
+		  torr = bdecoder.decode(fileString);
+		  //document.getElementById('result').innerHTML = JSON.stringify(torr);
+		  torrentViewer.view(torr, document.getElementById('encoding').value);
+		};
+		
+		reader.onerror = function (evt) {
+		  document.getElementById("error").innerHTML = error.name + ': ' + err.message;
+		};
+      } 
+    </script>  
+</head>  
+<body>  
+	<form id="form1" enctype="multipart/form-data" method="post" action="index.html">
+		<div class="row">
+			<label for="fileToUpload">Select a file:</label>
+			<input type="file" name="fileToUpload" id="fileToUpload" accept=".torrent" onchange="fileSelected();"/>
+		</div>
+		<div class="row">
+			<label for="encoding">Encoding:</label>
+			<input type="text" name="encoding" id="encoding" value="utf-8"/>
+		</div>
+		<div id="fileName"></div>
+		<div id="fileSize"></div>
+		<div id="fileType"></div>
+		<div id="fileLastModified"></div>
+		<div class="row">
+			<input type="button" onclick="uploadFile()" value="Upload" />
+		</div>
+		<div id="progress"></div>
+		<div id="readyState"></div>
+	</form>
+	<div id="result"></div>
+</body>  
+</html>
