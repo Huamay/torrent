@@ -1,5 +1,5 @@
 /*!
- * Torrent Decoder v0.1.0 (http://huamay.github.io/torrent)
+ * Torrent Decoder v1.0.1 (http://huamay.github.io/torrent)
  * Copyright 2016- Huamay
  * Licensed under the MIT license
  */
@@ -41,7 +41,7 @@ BDecoder.prototype.parseObj = function () {
 
 BDecoder.prototype.parseItems = function (dic) {
     while (this.dataView.getUint8(this.cursor) != 'e'.charCodeAt(0)) {
-        var key = this.parseKey();console.log(key);
+        var key = this.parseKey();
         if (key == 'info') {
             this.metadata = this.cursor;
             dic[key] = this.parseValue();
