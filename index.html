@@ -19,7 +19,7 @@
         }  
       }  
   
-      function uploadFile() {  
+      function viewFile() {  
         var reader = new FileReader(); //W3C FileAPI
 		document.getElementById('readyState').innerHTML = 'Ready State: ' + reader.readyState;
 		//reader.readAsBinaryString(file);
@@ -63,7 +63,7 @@
 		<div id="fileType"></div>
 		<div id="fileLastModified"></div>
 		<div class="row">
-			<input type="button" onclick="uploadFile()" value="Upload" />
+			<input type="button" onclick="viewFile()" value="View" />
 		</div>
 		<div id="progress"></div>
 		<div id="readyState"></div>

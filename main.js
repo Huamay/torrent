@@ -8,6 +8,10 @@ var BDecoder = function () {
     this.parseNum = function (dataV) {
         var num = '', offset = 0;
         var c = dataV.getUint8(offset);
+        if (c == '-'.charCodeAt(0)) {
+            num += String.fromCharCode(c);
+            c = dataV.getUint8(++offset);
+        }
         while (48 <= c && c < 58) {
             num += String.fromCharCode(c);
             c = dataV.getUint8(++offset);
@@ -37,7 +41,7 @@ BDecoder.prototype.parseObj = function () {
 
 BDecoder.prototype.parseItems = function (dic) {
     while (this.dataView.getUint8(this.cursor) != 'e'.charCodeAt(0)) {
-        var key = this.parseKey();
+        var key = this.parseKey();console.log(key);
         if (key == 'info') {
             this.metadata = this.cursor;
             dic[key] = this.parseValue();
