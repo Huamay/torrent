@@ -12,11 +12,11 @@ class ContentHTMLParser(HTMLParser):
         self.status = 0
 
     def handle_link(self, link):
-        url = 'https://api.openload.co/1/remotedl/add?login=3bf6721939c8a539&key=KelPfiNg&url='
+        url = 'https://api.openload.co/1/remotedl/add?login=3bf6721939c8a539&key=KelPfiNg&folder=1000146&url='
         url += link
         req = urllib.Request(url)
         j = urllib.urlopen(req).read().decode('utf-8')
-        if json.loads(j)['status'] != 200
+        if json.loads(j)['status'] != 200:
             print link
 
     def handle_starttag(self, tag, attrs):
@@ -51,7 +51,7 @@ class IndexHTMLParser(HTMLParser):
             chp.feed(html)
         except EndParserError as e:
             self.cnt += 1
-            print cnt,
+            print self.cnt,
 
     def handle_starttag(self, tag, attrs):
         if self.status == 1 and tag == 'a':
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     murl = ['http://av99.us/www/2/index', '.html']
     sidx = ''
     cnt = 0
-    for idx in range(1, 56):
+    for idx in range(1, 4):
         if idx > 1:
             sidx = '_' + str(idx)
         url = sidx.join(murl)
@@ -82,5 +82,5 @@ if __name__ == '__main__':
         ihp = IndexHTMLParser(idx)
         ihp.feed(html)
         cnt += ihp.cnt
-        print '(' + cnt + ')'
+        print '(' + str(cnt) + ')'
     print cnt
